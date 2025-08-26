@@ -20,4 +20,4 @@ const schema = mongoose.Schema(
   { timestamps: true }
 );
 
-mongoose.exports = mongoose.model("Passwords", schema);
+model.exports = mongoose.model("Passwords", schema);
