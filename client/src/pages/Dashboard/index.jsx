@@ -1,7 +1,8 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import { Plus } from "lucide-react";
+import { Plus, KeyRound } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import PasswordItem from "./PasswordItem";
 import {
   Breadcrumb,
@@ -36,6 +37,7 @@ export default function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [breadcrumb, setBreadcrumb] = useState("");
   const [formData, setFormData] = useState({});
+  const [isLoaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setBreadcrumb(searchParams.size === 0 ? "" : searchParams.get("tab"));
@@ -48,6 +50,7 @@ export default function Dashboard() {
     const data = await getPasswords({ email: localStorage.getItem("email") });
 
     if (data.status === 200) setPasswords(data.user);
+    if (data.status) setLoaded(true);
     //console.log(data);
   };
 
@@ -168,8 +171,15 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min text-center justify-center items-center flex">
-              Nemáte žádná uložená hesla
+            <div className="min-h-[100vh] text-muted-foreground flex-1 rounded-xl md:min-h-min text-center justify-center items-center flex">
+              {isLoaded ? (
+                <div className="flex flex-col items-center">
+                  <KeyRound className="mb-6 h-12 w-12" />
+                  <p>Nemáte žádná uložená hesla</p>
+                </div>
+              ) : (
+                <Spinner variant="ellipsis" />
+              )}
             </div>
           )}
         </div>

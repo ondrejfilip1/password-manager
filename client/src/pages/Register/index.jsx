@@ -12,20 +12,24 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { register } from "@/models/Users";
 import ThemeSwitcher from "@/components/theme-switcher";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
 
 export default function Register() {
   const [formData, setFormData] = useState();
   const [message, setMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token"));
+  const [isLoading, setIsLoading] = useState(false);
 
   const postForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const data = await register(formData);
     if (data.status === 200) {
-      console.log("Success");
+      window.location.replace("/dashboard");
     } else {
       setMessage(data.message);
     }
+    setIsLoading(false);
   };
 
   const handleChange = (e) => {
@@ -86,8 +90,12 @@ export default function Register() {
                     minLength={8}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Zaregistrovat se
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <Spinner variant="ellipsis" />
+                  ) : (
+                    "Zaregistrovat se"
+                  )}
                 </Button>
               </div>
               <p className="text-center text-red-500 opacity-50 text-sm mt-2">

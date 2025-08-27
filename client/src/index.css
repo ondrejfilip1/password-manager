@@ -144,6 +144,10 @@
   animation-delay: 300ms;
 }
 
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
 body {
   font-family: "Inter";
 }

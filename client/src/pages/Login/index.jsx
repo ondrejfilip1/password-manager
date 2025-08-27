@@ -12,19 +12,23 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { login } from "@/models/Users";
 import ThemeSwitcher from "@/components/theme-switcher";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
 
 export default function Login() {
   const [formData, setFormData] = useState();
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const postForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const data = await login(formData);
     if (data.status === 200) {
-      console.log("Success");
+      window.location.replace("/dashboard");
     } else {
       setMessage(data.message);
     }
+    setIsLoading(false);
   };
 
   const handleChange = (e) => {
@@ -71,8 +75,8 @@ export default function Login() {
                     onChange={handleChange}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Přihlásit se
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (<Spinner variant="ellipsis" />) : "Přihlásit se"}
                 </Button>
               </div>
 

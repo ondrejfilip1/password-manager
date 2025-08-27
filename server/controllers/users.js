@@ -8,22 +8,22 @@ exports.register = async (req, res, next) => {
 
     // details check
     if (!username || !email || !password)
-      return res.status(400).json({ message: "Enter all details" });
+      return res.status(400).json({ message: "Zadejte všechny detaily" });
 
     if (password.length < 8 || password.length > 64)
       return res
         .status(500)
-        .send({ message: "Password must be 8-64 characters long" });
+        .send({ message: "Heslo musí být 8-64 znaků dlouhé" });
 
     // existing user check
     const emailExists = await Users.findOne({ email });
     if (emailExists)
-      return res.status(400).json({ message: "This email is already in use" });
+      return res.status(400).json({ message: "Tento email je již zaregistrován" });
     const usernameExists = await Users.findOne({ username });
     if (usernameExists)
       return res
         .status(400)
-        .json({ message: "This Username is already in use" });
+        .json({ message: "Toto jméno bylo již použito" });
 
     const passwordHash = await bcrypt.hash(password, 12);
 
@@ -59,14 +59,14 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password)
-      return res.status(400).json({ message: "Enter all details" });
+      return res.status(400).json({ message: "Zadejte všechny detaily" });
 
     const findUser = await Users.findOne({ email });
-    if (!findUser) return res.status(400).json({ message: "User not found" });
+    if (!findUser) return res.status(400).json({ message: "Uživatel nenalezen" });
 
     if (!(await bcrypt.compare(password, findUser.password)))
       return res.status(400).send({
-        message: "Invalid credentials",
+        message: "Neplatné údaje",
       });
 
     const token = jwt.sign({ id: findUser._id }, process.env.JWT_SECRET, {

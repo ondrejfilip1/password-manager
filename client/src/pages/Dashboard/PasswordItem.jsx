@@ -48,9 +48,8 @@ export default function PasswordItem(props) {
         <CardHeader>
           <CardTitle className="truncate">{props.url}</CardTitle>
           <CardDescription className="truncate">
-            {"Přidáno " + moment(props.createdAt)
-                              .locale("cz")
-                              .format("DD.MM.YYYY HH:mm")}
+            {"Přidáno " +
+              moment(props.createdAt).locale("cz").format("DD.MM.YYYY HH:mm")}
           </CardDescription>
           <CardAction>
             <Button variant="icon" onClick={removePasswordFunc}>
@@ -79,7 +78,10 @@ export default function PasswordItem(props) {
           </div>
           {props.note && (
             <>
-              <p className="text-muted-foreground text-sm mt-4 mb-1 flex items-center gap-1"><PenLine className="!h-4" />Poznámka</p>
+              <p className="text-muted-foreground text-sm mt-4 mb-1 flex items-center gap-1">
+                <PenLine className="!h-4" />
+                Poznámka
+              </p>
               <p className="">{props.note}</p>
             </>
           )}

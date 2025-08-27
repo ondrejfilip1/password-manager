@@ -22,7 +22,7 @@ export default function Home() {
             <h1 className="animate-appear tracking-tight from-foreground to-foreground dark:to-muted-foreground inline-block max-w-[840px] bg-linear-to-r bg-clip-text text-4xl leading-tight font-semibold text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight lg:text-6xl lg:leading-tight">
               Chraňte svá hesla jednoduše a bezpečně.
             </h1>
-            <p className="text-md mx-auto animate-appear dark:text-muted-foreground text-neutral-700 max-w-[840px] font-medium opacity-0 !delay-100 lg:text-xl">
+            <p className="text-md mx-auto animate-appear dark:text-muted-foreground text-neutral-700 max-w-[840px] font-medium opacity-0 animation-delay-100 lg:text-xl">
               Moderní open-source aplikace, která vám umožní spravovat a chránit
               všechna hesla na jednom místě.
             </p>
