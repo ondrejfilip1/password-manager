@@ -149,7 +149,7 @@ export default function Dashboard() {
                       />
                     </div>
                   </div>
-                  <DialogFooter>
+                  <DialogFooter className="mt-4">
                     <DialogClose asChild>
                       <Button variant="outline">Zavřít</Button>
                     </DialogClose>

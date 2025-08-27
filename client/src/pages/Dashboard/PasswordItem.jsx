@@ -10,6 +10,7 @@ import { Trash, Eye, EyeOff, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { removePassword } from "@/models/Users";
+import moment from "moment";
 
 export default function PasswordItem(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +48,9 @@ export default function PasswordItem(props) {
         <CardHeader>
           <CardTitle className="truncate">{props.url}</CardTitle>
           <CardDescription className="truncate">
-            {props.createdAt}
+            {"Přidáno " + moment(props.createdAt)
+                              .locale("cz")
+                              .format("DD.MM.YYYY HH:mm")}
           </CardDescription>
           <CardAction>
             <Button variant="icon" onClick={removePasswordFunc}>
