@@ -3,7 +3,7 @@
 <ul>
   <li>Aplikace pro ukládání hesel</li>
   <li>Obsahuje přihlašovací a registrovací systém</li>
-  <li>Hesla jsou hashována pomocí <a href="https://www.npmjs.com/package/bcrypt">bcrypt</a></li>
+  <li>Hesla jsou šifrována pomocí <a href="https://cs.wikipedia.org/wiki/Advanced_Encryption_Standard">AES-256</a></li>
 </ul>
 
 ## ⚙️ Technologie
