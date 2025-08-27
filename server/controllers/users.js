@@ -1,5 +1,6 @@
 const Users = require("../models/users");
 const bcrypt = require("bcryptjs");
+const { encryptSymmetric, decryptSymmetric } = require("../utils/crypto");
 const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res, next) => {
@@ -18,12 +19,12 @@ exports.register = async (req, res, next) => {
     // existing user check
     const emailExists = await Users.findOne({ email });
     if (emailExists)
-      return res.status(400).json({ message: "Tento email je již zaregistrován" });
-    const usernameExists = await Users.findOne({ username });
-    if (usernameExists)
       return res
         .status(400)
-        .json({ message: "Toto jméno bylo již použito" });
+        .json({ message: "Tento email je již zaregistrován" });
+    const usernameExists = await Users.findOne({ username });
+    if (usernameExists)
+      return res.status(400).json({ message: "Toto jméno bylo již použito" });
 
     const passwordHash = await bcrypt.hash(password, 12);
 
@@ -62,7 +63,8 @@ exports.login = async (req, res, next) => {
       return res.status(400).json({ message: "Zadejte všechny detaily" });
 
     const findUser = await Users.findOne({ email });
-    if (!findUser) return res.status(400).json({ message: "Uživatel nenalezen" });
+    if (!findUser)
+      return res.status(400).json({ message: "Uživatel nenalezen" });
 
     if (!(await bcrypt.compare(password, findUser.password)))
       return res.status(400).send({
@@ -84,10 +86,15 @@ exports.login = async (req, res, next) => {
 
 exports.getPasswords = async (req, res, next) => {
   try {
+    const savedPasswords = req.user.savedPasswords.map((item) => ({
+      ...item.toObject(),
+      password: decryptSymmetric(JSON.parse(item.password)),
+    }));
     res.status(200).send({
-      payload: req.user.savedPasswords,
+      payload: savedPasswords,
     });
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 };
@@ -99,14 +106,26 @@ exports.addPassword = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid format" });
 
     const user = req.user;
-    user.savedPasswords.push({ url, password, note });
+
+    const encrypted = encryptSymmetric(password);
+
+    user.savedPasswords.push({
+      url,
+      password: JSON.stringify(encrypted),
+      note,
+    });
 
     const result = await user.save();
 
     if (result) {
+      const savedPasswords = req.user.savedPasswords.map((item) => ({
+        ...item.toObject(),
+        password: decryptSymmetric(JSON.parse(item.password)),
+      }));
+
       return res.status(200).send({
         message: "Password saved",
-        payload: user.savedPasswords,
+        payload: savedPasswords,
       });
     }
   } catch (e) {

@@ -22,6 +22,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -30,6 +41,14 @@ import {
 
 export function NavUser({ user }) {
   const { isMobile } = useSidebar();
+
+  const logOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+
+    window.location.replace("/");
+  };
 
   return (
     <SidebarMenu>
@@ -81,10 +100,28 @@ export function NavUser({ user }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Odhlásit se
-            </DropdownMenuItem>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <LogOut />
+                  Odhlásit se
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Opravdu se chcete odhlásit?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Po odhlášení se můžete znovu přihlásit.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Zavřit</AlertDialogCancel>
+                  <AlertDialogAction onClick={logOut}>Odhlásit se</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

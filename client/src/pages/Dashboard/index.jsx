@@ -46,6 +46,10 @@ export default function Dashboard() {
 
   const [passwords, setPasswords] = useState([]);
 
+  window.addEventListener("updatePasswords", () => {
+    load();
+  });
+
   const load = async () => {
     const data = await getPasswords({ email: localStorage.getItem("email") });
 
@@ -87,7 +91,7 @@ export default function Dashboard() {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">Password manager</BreadcrumbLink>
+                    <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
                   </BreadcrumbItem>
                   {breadcrumb && (
                     <>
@@ -164,7 +168,7 @@ export default function Dashboard() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {passwords.length > 0 ? (
+          {passwords.length && passwords.length > 0 ? (
             <div className="grid auto-rows-min gap-4 md:grid-cols-2">
               {passwords.map((value, index) => (
                 <PasswordItem {...value} key={index} />

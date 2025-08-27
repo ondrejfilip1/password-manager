@@ -11,6 +11,17 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { removePassword } from "@/models/Users";
 import moment from "moment";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function PasswordItem(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,24 +48,53 @@ export default function PasswordItem(props) {
     );
 
     if (data.status === 200) {
+      window.dispatchEvent(new Event("updatePasswords"));
       // todo: send event to reload passwords
-      alert("deleted successfully");
+      // alert("deleted successfully");
     }
   };
 
   return (
     <>
-      <Card>
+      <Card className="relative group">
         <CardHeader>
-          <CardTitle className="truncate">{props.url}</CardTitle>
+          <CardTitle className="truncate pb-0.5">{props.url}</CardTitle>
           <CardDescription className="truncate">
             {"Přidáno " +
               moment(props.createdAt).locale("cz").format("DD.MM.YYYY HH:mm")}
           </CardDescription>
           <CardAction>
-            <Button variant="icon" onClick={removePasswordFunc}>
-              <Trash />
-            </Button>
+            <img
+              className="rounded-sm group-hover:hidden"
+              src={`http://www.google.com/s2/favicons?domain_url=${props.url}&sz=28`}
+              alt="favicon"
+            />
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="icon"
+                  className="!px-2.5 hidden group-hover:block hover:bg-muted relative bottom-1 left-1"
+                >
+                  <Trash />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Opravdu chcete smazat heslo?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tato akce nelze vrátit zpět.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Zavřít</AlertDialogCancel>
+                  <AlertDialogAction onClick={removePasswordFunc}>
+                    Smazat
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </CardAction>
         </CardHeader>
         <CardContent>

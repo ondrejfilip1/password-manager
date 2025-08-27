@@ -17,7 +17,6 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 export default function Register() {
   const [formData, setFormData] = useState();
   const [message, setMessage] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token"));
   const [isLoading, setIsLoading] = useState(false);
 
   const postForm = async (e) => {
@@ -107,7 +106,7 @@ export default function Register() {
             <span className="text-sm">Máte již účet?</span>
             <Link to="/login">
               <Button variant="link" className="p-0 font-normal">
-                {isLoggedIn ? "Přejít na dashboard" : "Přihlašte se"}
+                Přihlašte se
               </Button>
             </Link>
           </CardFooter>
