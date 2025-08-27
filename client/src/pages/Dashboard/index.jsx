@@ -145,7 +145,6 @@ export default function Dashboard() {
                         type="text"
                         id="note"
                         name="note"
-                        
                         onChange={handleChange}
                       />
                     </div>

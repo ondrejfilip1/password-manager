@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Component } from "@/components/etheral-shadow";
 import { Link } from "react-router-dom";
 import ThemeSwitcher from "@/components/theme-switcher";
+import { useState } from "react";
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token"));
   return (
     <>
       <Component
@@ -25,8 +27,10 @@ export default function Home() {
               všechna hesla na jednom místě.
             </p>
             <div className="animate-appear mx-auto flex justify-center gap-4 opacity-0 animation-delay-300">
-              <Link to="/login">
-                <Button>Přihlásit se</Button>
+              <Link to={isLoggedIn ? "/dashboard" : "/login"}>
+                <Button>
+                  {isLoggedIn ? "Přejít do aplikace" : "Přihlásit se"}
+                </Button>
               </Link>
               <Link to="https://github.com/ondrejfilip1/password-manager">
                 <Button variant="outline">

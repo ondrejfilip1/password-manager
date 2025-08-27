@@ -6,9 +6,10 @@ import {
   CardTitle,
   CardAction,
 } from "@/components/ui/card";
-import { Trash, Eye, EyeOff } from "lucide-react";
+import { Trash, Eye, EyeOff, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { removePassword } from "@/models/Users";
 
 export default function PasswordItem(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,10 +25,21 @@ export default function PasswordItem(props) {
     return result;
   };
 
-    const [fakePassword] = useState(() =>
+  const [fakePassword] = useState(() =>
     randomTextGenerator(props.password.length)
   );
 
+  const removePasswordFunc = async () => {
+    const data = await removePassword(
+      { email: localStorage.getItem("email") },
+      props._id
+    );
+
+    if (data.status === 200) {
+      // todo: send event to reload passwords
+      alert("deleted successfully");
+    }
+  };
 
   return (
     <>
@@ -38,7 +50,7 @@ export default function PasswordItem(props) {
             {props.createdAt}
           </CardDescription>
           <CardAction>
-            <Button variant="icon">
+            <Button variant="icon" onClick={removePasswordFunc}>
               <Trash />
             </Button>
           </CardAction>
@@ -52,9 +64,7 @@ export default function PasswordItem(props) {
                   : "blur-[4px] select-none"
               }
             >
-              {showPassword
-                ? props.password
-                : fakePassword}
+              {showPassword ? props.password : fakePassword}
             </span>
             <Button
               variant="icon"
@@ -66,7 +76,7 @@ export default function PasswordItem(props) {
           </div>
           {props.note && (
             <>
-              <p className="text-muted-foreground text-sm mt-4">Poznámka</p>
+              <p className="text-muted-foreground text-sm mt-4 mb-1 flex items-center gap-1"><PenLine className="!h-4" />Poznámka</p>
               <p className="">{props.note}</p>
             </>
           )}

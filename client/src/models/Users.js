@@ -70,12 +70,12 @@ export const addPassword = async (formData) => {
   }
 };
 
-export const removePassword = async (formData) => {
+export const removePassword = async (formData, id) => {
   const token = localStorage.getItem("token");
 
   try {
     const res = await axios.post(
-      `${getURL()}/users/remove-password`,
+      `${getURL()}/users/remove-password/${id}`,
       formData,
       {
         headers: { Authorization: `Bearer ${token}` },
