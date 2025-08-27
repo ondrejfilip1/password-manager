@@ -39,6 +39,9 @@ export default function Dashboard() {
   const [formData, setFormData] = useState({});
   const [isLoaded, setLoaded] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     setBreadcrumb(searchParams.size === 0 ? "" : searchParams.get("tab"));
     load();
@@ -64,16 +67,19 @@ export default function Dashboard() {
 
   const addPasswordFunc = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const data = await addPassword(formData);
 
     if (data.status === 200) {
       setFormData({});
       setPasswords(data.user);
+      setOpen(false);
       /*
       console.log(data)
       alert("success wow!");
       */
     }
+    setIsLoading(false);
   };
 
   return (
@@ -104,7 +110,7 @@ export default function Dashboard() {
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline">
                   <Plus />
@@ -160,7 +166,13 @@ export default function Dashboard() {
                     <DialogClose asChild>
                       <Button variant="outline">Zavřít</Button>
                     </DialogClose>
-                    <Button type="submit">Uložit heslo</Button>
+                    <Button type="submit" disabled={isLoading} className="min-w-[110px]">
+                      {isLoading ? (
+                        <Spinner variant="ellipsis" />
+                      ) : (
+                        "Uložit heslo"
+                      )}
+                    </Button>
                   </DialogFooter>
                 </form>
               </DialogContent>
