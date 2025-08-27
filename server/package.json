@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "prod": "node ./bin/www"
+    "prod": "NODE_ENV=production nodemon app.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
