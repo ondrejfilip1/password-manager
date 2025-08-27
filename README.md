@@ -10,7 +10,7 @@
 
 <p>Projekt byl vytvořen v <a href="https://www.mongodb.com/resources/languages/mern-stack">MERN</a> stacku</p>
 
-- **Client:** React + Vite, shadcn/ui, TailwindCSS, Lucide
+- **Client:** React + Vite, Axios, shadcn/ui, TailwindCSS, Lucide
 
 - **Server:** Node, Express, MongoDB, Mongoose, JWT (JSON Web Token)
 
