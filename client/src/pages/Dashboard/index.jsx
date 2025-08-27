@@ -106,7 +106,7 @@ export default function Dashboard() {
             </div>
             <Dialog>
               <DialogTrigger asChild>
-                <Button>
+                <Button variant="outline">
                   <Plus />
                   Přidat heslo
                 </Button>
