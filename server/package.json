@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install"
+    "prod": "node ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
