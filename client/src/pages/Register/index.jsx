@@ -18,9 +18,11 @@ export default function Register() {
   const [formData, setFormData] = useState();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [passCorrect, setPassCorrect] = useState(false);
 
   const postForm = async (e) => {
     e.preventDefault();
+    if (!passCorrect) return setMessage("Hesla se neshodují");
     setIsLoading(true);
     const data = await register(formData);
     if (data.status === 200) {
@@ -35,10 +37,21 @@ export default function Register() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  const handlePasswordCheck = (e) => {
+    if (formData && formData.password) {
+      if (formData.password !== e.target.value) {
+        setMessage("Hesla se neshodují");
+      } else {
+        setMessage("");
+        setPassCorrect(true);
+      }
+    }
+  };
+
   return (
     <>
       <ThemeSwitcher />
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen mx-4">
         <Card className="w-full max-w-sm">
           <CardHeader>
             <CardTitle className="text-center">Registrace účtu</CardTitle>
@@ -76,7 +89,10 @@ export default function Register() {
                     required
                     maxLength={64}
                     minLength={8}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      handlePasswordCheck(e);
+                    }}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -87,6 +103,7 @@ export default function Register() {
                     required
                     maxLength={64}
                     minLength={8}
+                    onChange={handlePasswordCheck}
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>

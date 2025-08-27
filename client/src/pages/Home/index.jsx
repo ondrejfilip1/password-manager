@@ -16,7 +16,7 @@ export default function Home() {
         className="!fixed w-100 h-screen"
       />
       <ThemeSwitcher />
-      <div className="max-w-container mx-auto flex flex-col gap-12 pt-16 sm:gap-24 min-h-screen justify-center">
+      <div className="max-w-container mx-auto px-4 flex flex-col gap-12 pt-16 sm:gap-24 min-h-screen justify-center">
         <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
           <div className="flex flex-col items-start gap-6 sm:gap-8 text-center">
             <h1 className="animate-appear tracking-tight from-foreground to-foreground dark:to-muted-foreground inline-block max-w-[840px] bg-linear-to-r bg-clip-text text-4xl leading-tight font-semibold text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight lg:text-6xl lg:leading-tight">

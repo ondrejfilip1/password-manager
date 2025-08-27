@@ -6,7 +6,16 @@ import {
   CardTitle,
   CardAction,
 } from "@/components/ui/card";
-import { Trash, Eye, EyeOff, PenLine } from "lucide-react";
+import { CopyButton } from "@/components/animate-ui/buttons/copy";
+import {
+  Trash,
+  Eye,
+  EyeOff,
+  PenLine,
+  Globe,
+  Clipboard,
+  CalendarClock,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { removePassword } from "@/models/Users";
@@ -25,6 +34,7 @@ import {
 
 export default function PasswordItem(props) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showFavicon, setShowFavicon] = useState(true);
 
   const randomTextGenerator = (length) => {
     let result = "";
@@ -54,21 +64,34 @@ export default function PasswordItem(props) {
     }
   };
 
+  const checkFavicon = (e) => {
+    if (e.target.naturalWidth === 16 && e.target.naturalHeight === 16)
+      setShowFavicon(false);
+  };
+
   return (
     <>
       <Card className="relative group">
         <CardHeader>
           <CardTitle className="truncate pb-0.5">{props.url}</CardTitle>
-          <CardDescription className="truncate">
+          <CardDescription className="truncate flex items-center gap-1">
+            <CalendarClock className="!h-4" />
             {"Přidáno " +
               moment(props.createdAt).locale("cz").format("DD.MM.YYYY HH:mm")}
           </CardDescription>
           <CardAction>
-            <img
-              className="rounded-sm group-hover:hidden"
-              src={`http://www.google.com/s2/favicons?domain_url=${props.url}&sz=28`}
-              alt="favicon"
-            />
+            {showFavicon ? (
+              <img
+                className="rounded-sm group-hover:hidden"
+                src={`https://www.google.com/s2/favicons?domain_url=${props.url}&sz=32`}
+                alt="favicon"
+                height={28}
+                width={28}
+                onLoad={checkFavicon}
+              />
+            ) : (
+              <Globe className="group-hover:hidden h-[28px] w-[28px]" />
+            )}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -101,28 +124,40 @@ export default function PasswordItem(props) {
           <div className="border-input flex relative h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none">
             <span
               className={
-                showPassword
+                (showPassword
                   ? "transition-[filter] duration-[100ms]"
-                  : "blur-[4px] select-none"
+                  : "blur-[4px] select-none") + " truncate"
               }
             >
               {showPassword ? props.password : fakePassword}
             </span>
-            <Button
-              variant="icon"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2"
-            >
-              {showPassword ? <EyeOff /> : <Eye />}
-            </Button>
+            <div className="flex absolute right-0 top-1/2 transform -translate-y-1/2">
+              {showPassword && (
+                <CopyButton
+                  content={props.password}
+                  variant="ghost"
+                  className="!px-2.5 h-9 w-9"
+                  delay={1500}
+                >
+                  <Clipboard />
+                </CopyButton>
+              )}
+              <Button
+                variant="ghost"
+                className="!px-2.5"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff /> : <Eye />}
+              </Button>
+            </div>
           </div>
           {props.note && (
             <>
-              <p className="text-muted-foreground text-sm mt-4 mb-1 flex items-center gap-1">
+              <p className="text-muted-foreground text-sm mt-4 flex items-center gap-1">
                 <PenLine className="!h-4" />
-                Poznámka
+                Poznámka:{" "}
+                {props.note}
               </p>
-              <p className="">{props.note}</p>
             </>
           )}
         </CardContent>

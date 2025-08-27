@@ -38,7 +38,7 @@ export default function Login() {
   return (
     <>
       <ThemeSwitcher />
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen mx-4">
         <Card className="w-full max-w-sm">
           <CardHeader>
             <CardTitle className="text-center">Přihlášení k účtu</CardTitle>
