@@ -49,7 +49,7 @@ exports.register = async (req, res, next) => {
       message: "User not created",
     });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).send(e);
   }
 };
@@ -69,7 +69,7 @@ exports.login = async (req, res, next) => {
         message: "Invalid credentials",
       });
 
-    const token = jwt.sign({ id: data._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: findUser._id }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
 
@@ -82,8 +82,33 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.getPasswords = async (req, res, next) => {
+  try {
+    res.status(200).send({
+      payload: req.user.savedPasswords,
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
 exports.addPassword = async (req, res, next) => {
   try {
+    const { url, password, note } = req.body;
+    if (!url || !password)
+      return res.status(400).json({ message: "Invalid format" });
+
+    const user = req.user;
+    user.savedPasswords.push({ url, password, note });
+
+    const result = await user.save();
+
+    if (result) {
+      return res.status(200).send({
+        message: "Password saved",
+        payload: user.savedPasswords,
+      });
+    }
   } catch (e) {
     res.status(500).send(e);
   }
@@ -91,6 +116,21 @@ exports.addPassword = async (req, res, next) => {
 
 exports.removePassword = async (req, res, next) => {
   try {
+    const id = req.params.id;
+    if (!id)
+      return res.status(400).send({ message: "ID of password is required" });
+
+    const user = req.user;
+    user.savedPasswords = user.savedPasswords.filter(
+      (item) => item._id.toString() !== id
+    );
+    const result = await user.save();
+    if (result) {
+      return res.status(200).send({
+        message: "Password removed",
+        payload: user.savedPasswords,
+      });
+    }
   } catch (e) {
     res.status(500).send(e);
   }

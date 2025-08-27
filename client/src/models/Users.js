@@ -25,39 +25,97 @@ export const register = async (formData) => {
 };
 
 export const login = async (formData) => {
-  axios
-    .post(`${getURL()}/users/login`, formData)
-    .then((res) => {
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("username", res.payload.username);
-      localStorage.setItem("email", res.payload.email);
-      return {
-        status: res.status,
-        message: res.message,
-        user: res.payload,
-      };
-    })
-    .catch((err) => {
-      return {
-        status: err.response.status,
-        message: err.response.data.message,
-      };
-    });
+  try {
+    const res = await axios.post(`${getURL()}/users/login`, formData);
+    const data = res.data;
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("username", data.payload.username);
+    localStorage.setItem("email", data.payload.email);
+
+    return {
+      status: res.status,
+      message: data.message,
+      user: data.payload,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      status: err.response.status,
+      message: err.response.data.message,
+    };
+  }
 };
 
 export const addPassword = async (formData) => {
   const token = localStorage.getItem("token");
-  axios
-    .post(`${getURL()}/users/add-password`, formData, {
+
+  try {
+    const res = await axios.post(`${getURL()}/users/add-password`, formData, {
       headers: { Authorization: `Bearer ${token}` },
-    })
-    .then((res) => {})
-    .catch((err) => {});
+    });
+    const data = res.data;
+
+    return {
+      status: res.status,
+      message: data.message,
+      user: data.payload,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      status: err.response.status,
+      message: err.response.data.message,
+    };
+  }
 };
 
 export const removePassword = async (formData) => {
-  axios
-    .delete(`${getURL()}/users/remove-password`, formData)
-    .then((res) => {})
-    .catch((err) => {});
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await axios.post(
+      `${getURL()}/users/remove-password`,
+      formData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    const data = res.data;
+
+    return {
+      status: res.status,
+      message: data.message,
+      user: data.payload,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      status: err.response.status,
+      message: err.response.data.message,
+    };
+  }
+};
+
+export const getPasswords = async (formData) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await axios.post(`${getURL()}/users/get-passwords`, formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = res.data;
+
+    return {
+      status: res.status,
+      message: data.message,
+      user: data.payload,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      status: err.response.status,
+      message: err.response.data.message,
+    };
+  }
 };

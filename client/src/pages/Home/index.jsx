@@ -1,12 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Component } from "@/components/etheral-shadow";
 import { Link } from "react-router-dom";
-import { Sun, Moon } from "lucide-react";
-import { useTheme } from "@/components/theme-provider";
+import ThemeSwitcher from "@/components/theme-switcher";
 
 export default function Home() {
-  const { setTheme, theme } = useTheme();
-
   return (
     <>
       <Component
@@ -16,18 +13,7 @@ export default function Home() {
         sizing="fill"
         className="!fixed w-100 h-screen"
       />
-
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed right-2 top-2"
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      >
-        <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-        <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-        <span className="sr-only">Toggle theme</span>
-      </Button>
-
+      <ThemeSwitcher />
       <div className="max-w-container mx-auto flex flex-col gap-12 pt-16 sm:gap-24 min-h-screen justify-center">
         <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
           <div className="flex flex-col items-start gap-6 sm:gap-8 text-center">
