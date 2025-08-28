@@ -1,16 +1,14 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import { Plus, KeyRound } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
-import PasswordItem from "./PasswordItem";
+import PasswordGrid from "./PasswordGrid";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -32,6 +30,8 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import Settings from "./Settings";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,9 +43,13 @@ export default function Dashboard() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    loadBreacrumb();
+    if (searchParams.size === 0) load();
+  }, [searchParams]);
+
+  const loadBreacrumb = () => {
     setBreadcrumb(searchParams.size === 0 ? "" : searchParams.get("tab"));
-    load();
-  }, []);
+  };
 
   const [passwords, setPasswords] = useState([]);
 
@@ -74,6 +78,7 @@ export default function Dashboard() {
       setFormData({});
       setPasswords(data.user);
       setOpen(false);
+      toast("Heslo bylo úspěšně přidáno.");
       /*
       console.log(data)
       alert("success wow!");
@@ -97,108 +102,93 @@ export default function Dashboard() {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+                    <BreadcrumbLink href="#">
+                      {breadcrumb ? breadcrumb : "Všechna hesla"}
+                    </BreadcrumbLink>
                   </BreadcrumbItem>
-                  {breadcrumb && (
-                    <>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>{breadcrumb}</BreadcrumbPage>
-                      </BreadcrumbItem>
-                    </>
-                  )}
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Plus />
-                  Přidat heslo
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Přidat heslo</DialogTitle>
-                  <DialogDescription>
-                    Zadejte všechny povinné údaje.
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={addPasswordFunc}>
-                  <div className="grid gap-4">
-                    <div className="grid gap-3">
-                      <Label htmlFor="url">URL adresa</Label>
-                      <Input
-                        type="url"
-                        id="url"
-                        name="url"
-                        required
-                        placeholder="https://example.com"
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="password">Heslo</Label>
-                      <Input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <div className="flex justify-between items-center">
-                        <Label htmlFor="note">Poznámka</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Nepovinné
-                        </p>
+            {!breadcrumb && (
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <Plus />
+                    Přidat heslo
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Přidat heslo</DialogTitle>
+                    <DialogDescription>
+                      Zadejte všechny povinné údaje.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={addPasswordFunc}>
+                    <div className="grid gap-4">
+                      <div className="grid gap-3">
+                        <Label htmlFor="url">URL adresa</Label>
+                        <Input
+                          type="url"
+                          id="url"
+                          name="url"
+                          required
+                          placeholder="https://example.com"
+                          onChange={handleChange}
+                        />
                       </div>
-                      <Input
-                        type="text"
-                        id="note"
-                        name="note"
-                        onChange={handleChange}
-                      />
+                      <div className="grid gap-3">
+                        <Label htmlFor="password">Heslo</Label>
+                        <Input
+                          type="password"
+                          id="password"
+                          name="password"
+                          required
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="grid gap-3">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="note">Poznámka</Label>
+                          <p className="text-sm text-muted-foreground">
+                            Nepovinné
+                          </p>
+                        </div>
+                        <Input
+                          type="text"
+                          id="note"
+                          name="note"
+                          onChange={handleChange}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <DialogFooter className="mt-4">
-                    <DialogClose asChild>
-                      <Button variant="outline">Zavřít</Button>
-                    </DialogClose>
-                    <Button type="submit" disabled={isLoading} className="min-w-[110px]">
-                      {isLoading ? (
-                        <Spinner variant="ellipsis" />
-                      ) : (
-                        "Uložit heslo"
-                      )}
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+                    <DialogFooter className="mt-4">
+                      <DialogClose asChild>
+                        <Button variant="outline">Zavřít</Button>
+                      </DialogClose>
+                      <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="min-w-[110px]"
+                      >
+                        {isLoading ? (
+                          <Spinner variant="ellipsis" />
+                        ) : (
+                          "Uložit heslo"
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {passwords.length && passwords.length > 0 ? (
-            <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-              {passwords.map((value, index) => (
-                <PasswordItem {...value} key={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="min-h-[100vh] text-muted-foreground flex-1 rounded-xl md:min-h-min text-center justify-center items-center flex">
-              {isLoaded ? (
-                <div className="flex flex-col items-center">
-                  <KeyRound className="mb-6 h-12 w-12" />
-                  <p>Nemáte žádná uložená hesla</p>
-                </div>
-              ) : (
-                <Spinner variant="ellipsis" />
-              )}
-            </div>
-          )}
-        </div>
+        {!breadcrumb ? (
+          <PasswordGrid isLoaded={isLoaded} passwords={passwords} />
+        ) : (
+          breadcrumb === "Nastavení" && <Settings />
+        )}
       </SidebarInset>
     </SidebarProvider>
   );

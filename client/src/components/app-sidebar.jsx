@@ -22,14 +22,14 @@ const data = {
   passwords: [
     {
       name: "Všechna hesla",
-      url: "#",
+      url: "/dashboard",
       icon: KeyRound,
     },
   ],
     account: [
     {
       name: "Nastavení",
-      url: "#",
+      url: `/dashboard?tab=Nastavení`,
       icon: Settings,
     },
   ],

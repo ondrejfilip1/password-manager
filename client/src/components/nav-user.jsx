@@ -1,16 +1,7 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Settings,
-  Sparkles,
-  UserRound,
-} from "lucide-react";
-
+import { ChevronsUpDown, LogOut, Settings, UserRound } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -94,10 +85,12 @@ export function NavUser({ user }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Settings />
-                Nastavení
-              </DropdownMenuItem>
+              <Link to={`/dashboard?tab=Nastavení`}>
+                <DropdownMenuItem>
+                  <Settings />
+                  Nastavení
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <AlertDialog>
@@ -118,7 +111,9 @@ export function NavUser({ user }) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Zavřit</AlertDialogCancel>
-                  <AlertDialogAction onClick={logOut}>Odhlásit se</AlertDialogAction>
+                  <AlertDialogAction onClick={logOut}>
+                    Odhlásit se
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

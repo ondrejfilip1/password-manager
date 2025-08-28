@@ -31,6 +31,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 export default function PasswordItem(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -59,6 +60,7 @@ export default function PasswordItem(props) {
 
     if (data.status === 200) {
       window.dispatchEvent(new Event("updatePasswords"));
+      toast("Heslo bylo úspěšně smazáno.");
       // todo: send event to reload passwords
       // alert("deleted successfully");
     }
@@ -134,6 +136,7 @@ export default function PasswordItem(props) {
             <div className="flex absolute right-0 top-1/2 transform -translate-y-1/2">
               {showPassword && (
                 <CopyButton
+                  onClick={() => toast("Heslo bylo zkopírováno do schránky.")}
                   content={props.password}
                   variant="ghost"
                   className="!px-2.5 h-9 w-9"
@@ -155,8 +158,7 @@ export default function PasswordItem(props) {
             <>
               <p className="text-muted-foreground text-sm mt-4 flex items-center gap-1">
                 <PenLine className="!h-4" />
-                Poznámka:{" "}
-                {props.note}
+                Poznámka: {props.note}
               </p>
             </>
           )}
