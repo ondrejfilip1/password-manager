@@ -4,7 +4,7 @@ import {
   Settings,
 } from "lucide-react";
 
-import { NavPasswords } from "@/components/nav-projects";
+import { NavPasswords } from "@/components/nav-passwords";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
