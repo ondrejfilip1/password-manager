@@ -19,7 +19,7 @@ export function NavPasswords({ passwords: passwords, account: account }) {
         <SidebarMenu>
           {passwords.map((item) => (
             <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton tooltip={item.name} asChild>
                 <Link to={item.url}>
                   <item.icon />
                   <span>{item.name}</span>
@@ -38,7 +38,7 @@ export function NavPasswords({ passwords: passwords, account: account }) {
         <SidebarMenu>
           {account.map((item) => (
             <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton tooltip={item.name} asChild>
                 <Link to={item.url}>
                   <item.icon />
                   <span>{item.name}</span>
