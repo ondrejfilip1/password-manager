@@ -3,6 +3,7 @@ import { Component } from "@/components/etheral-shadow";
 import { Link } from "react-router-dom";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { useState } from "react";
+import { isMobile } from "react-device-detect";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token"));
@@ -10,7 +11,7 @@ export default function Home() {
     <>
       <Component
         color="rgba(128, 128, 128, 1)"
-        animation={{ scale: 100, speed: 90 }}
+        animation={isMobile ? undefined : { scale: 100, speed: 90 }}
         noise={{ opacity: 1, scale: 1.2 }}
         sizing="fill"
         className="!fixed w-100 h-screen"
