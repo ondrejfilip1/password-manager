@@ -31,3 +31,7 @@ Server
   npm install
   npm start
 ```
+## ✅ TODO
+
+- 2FA (OTP)
+- Fixnout ověření hesel v registraci
