@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { register } from "@/models/Users";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
@@ -19,6 +19,7 @@ export default function Register() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [passCorrect, setPassCorrect] = useState(false);
+  const [passToCheck, setPassToCheck] = useState("");
 
   const postForm = async (e) => {
     e.preventDefault();
@@ -37,16 +38,21 @@ export default function Register() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handlePasswordCheck = (e) => {
-    if (formData && formData.password) {
-      if (formData.password !== e.target.value) {
-        setMessage("Hesla se neshodují");
-      } else {
-        setMessage("");
-        setPassCorrect(true);
-      }
+  const handlePasswordCheck = () => {
+    if (!formData || !formData.password) return;
+
+    if (formData.password !== passToCheck) {
+      setMessage("Hesla se neshodují");
+      setPassCorrect(false);
+    } else {
+      setMessage("");
+      setPassCorrect(true);
     }
   };
+
+  useEffect(() => {
+    handlePasswordCheck();
+  }, [formData, passToCheck]);
 
   return (
     <>
@@ -89,10 +95,7 @@ export default function Register() {
                     required
                     maxLength={64}
                     minLength={8}
-                    onChange={(e) => {
-                      handleChange(e);
-                      handlePasswordCheck(e);
-                    }}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -103,7 +106,7 @@ export default function Register() {
                     required
                     maxLength={64}
                     minLength={8}
-                    onChange={handlePasswordCheck}
+                    onChange={(e) => setPassToCheck(e.target.value)}
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
