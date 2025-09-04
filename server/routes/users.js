@@ -9,6 +9,10 @@ router.post("/login", usersRouter.login);
 
 router.post("/register", usersRouter.register);
 
+// OTP verification
+
+router.post("/verify-otp", usersRouter.verifyOTP);
+
 // Passwords
 
 router.post("/get-passwords", auth, usersRouter.getPasswords);

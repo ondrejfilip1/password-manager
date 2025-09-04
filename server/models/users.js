@@ -45,6 +45,7 @@ const usersSchema = mongoose.Schema(
     savedPasswords: {
       type: [passwordsSchema],
     },
+    otp: { type: String },
   },
   { timestamps: true }
 );

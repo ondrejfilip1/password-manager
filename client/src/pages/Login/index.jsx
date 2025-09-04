@@ -10,19 +10,41 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { login } from "@/models/Users";
+import { login, verifyOTP } from "@/models/Users";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 export default function Login() {
   const [formData, setFormData] = useState();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showOTP, setShowOTP] = useState(false);
+  const [email, setEmail] = useState("");
 
-  const postForm = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const data = await login(formData);
+    if (data.status === 200) {
+      setShowOTP(true);
+      setEmail(formData.email);
+      setFormData();
+    } else {
+      setMessage(data.message);
+    }
+    setIsLoading(false);
+  };
+
+  const handleOTP = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const data = await verifyOTP({ otp: formData });
     if (data.status === 200) {
       window.location.replace("/dashboard");
     } else {
@@ -41,58 +63,97 @@ export default function Login() {
       <div className="flex justify-center items-center min-h-screen mx-4">
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="text-center">Přihlášení k účtu</CardTitle>
+            <CardTitle className="text-center">
+              {showOTP ? "Dvoufázová verifikace" : "Přihlášení k účtu"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={postForm}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="abc@example.com"
-                    required
-                    onChange={handleChange}
-                  />
+            {showOTP ? (
+              <form onSubmit={handleOTP}>
+                <div className="flex flex-col gap-6 justify-center items-center text-center">
+                  <p>Na váš email {email} jsme Vám zaslali verifikační kód</p>
+                  <InputOTP
+                    maxLength={6}
+                    value={formData}
+                    onChange={(value) => setFormData(value)}
+                    pattern={REGEXP_ONLY_DIGITS}
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                  {message && (
+                    <p className="text-center text-red-500 opacity-50 text-sm mt-2">
+                      {message}
+                    </p>
+                  )}
+                  <Button type="submit" disabled={isLoading} className="w-full">
+                    {isLoading ? <Spinner variant="ellipsis" /> : "Ověřit"}
+                  </Button>
                 </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Heslo</Label>
-                    <Link
-                      to="#"
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                    >
-                      Zapomněli jste heslo?
-                    </Link>
+              </form>
+            ) : (
+              <form onSubmit={handleLogin}>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="abc@example.com"
+                      required
+                      onChange={handleChange}
+                    />
                   </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    required
-                    maxLength={64}
-                    minLength={8}
-                    onChange={handleChange}
-                  />
+                  <div className="grid gap-2">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Heslo</Label>
+                      <Link
+                        to="#"
+                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                      >
+                        Zapomněli jste heslo?
+                      </Link>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      maxLength={64}
+                      minLength={8}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? (
+                      <Spinner variant="ellipsis" />
+                    ) : (
+                      "Přihlásit se"
+                    )}
+                  </Button>
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? (<Spinner variant="ellipsis" />) : "Přihlásit se"}
-                </Button>
-              </div>
 
-              <p className="text-center text-red-500 opacity-50 text-sm mt-2">
-                {message}
-              </p>
-            </form>
+                <p className="text-center text-red-500 opacity-50 text-sm mt-2">
+                  {message}
+                </p>
+              </form>
+            )}
           </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <span className="text-sm">Nemáte ještě účet?</span>
-            <Link to="/register">
-              <Button variant="link" className="p-0 font-normal">
-                Zaregistrujte se
-              </Button>
-            </Link>
-          </CardFooter>
+          {!showOTP && (
+            <CardFooter className="flex-col gap-2">
+              <span className="text-sm">Nemáte ještě účet?</span>
+              <Link to="/register">
+                <Button variant="link" className="p-0 font-normal">
+                  Zaregistrujte se
+                </Button>
+              </Link>
+            </CardFooter>
+          )}
         </Card>
       </div>
     </>

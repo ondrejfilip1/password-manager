@@ -2,6 +2,9 @@ const Users = require("../models/users");
 const bcrypt = require("bcryptjs");
 const { encryptSymmetric, decryptSymmetric } = require("../utils/crypto");
 const jwt = require("jsonwebtoken");
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+const nodemailer = require("nodemailer");
+const randomize = require("randomatic");
 
 exports.register = async (req, res, next) => {
   try {
@@ -71,13 +74,14 @@ exports.login = async (req, res, next) => {
         message: "Neplatné údaje",
       });
 
-    const token = jwt.sign({ id: findUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    const otp = randomize("0", 6);
+    findUser.otp = otp;
+    findUser.save();
+
+    sendOTP(email, otp);
 
     return res.status(200).send({
-      token,
-      payload: findUser,
+      message: "Logged in successfully, waiting for OTP verification",
     });
   } catch (e) {
     res.status(500).send(e);
@@ -152,5 +156,61 @@ exports.removePassword = async (req, res, next) => {
     }
   } catch (e) {
     res.status(500).send(e);
+  }
+};
+
+exports.verifyOTP = async (req, res, next) => {
+  try {
+    const { otp } = req.body;
+    if (!otp) return res.status(400).json({ message: "OTP not provided" });
+
+    const findUser = await Users.findOne({ otp });
+    if (!findUser) return res.status(400).json({ message: "Zadán špatný kód" });
+
+    console.log(findUser);
+    findUser.otp = "";
+    await findUser.save();
+
+    const token = jwt.sign({ id: findUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+
+    return res.status(200).send({
+      token,
+      payload: findUser,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e);
+  }
+};
+
+const sendOTP = async (email, otp) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "pass.manager.help.email@gmail.com",
+        pass: GMAIL_APP_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: "pass.manager.help.email@gmail.com",
+      to: email,
+      subject: "Dvoufázová verifikace",
+      html: `
+      <div style="font-family: Helvetica,Arial,sans-serif;">
+      <p style="padding-bottom: 16px">Váš verifikační kód je</p>
+      <h2 style="border-radius: 4px;padding: 0 10px;background:#1e1d29;width: max-content;color:#ffffff;">${otp}</h2>
+      </div>
+      `,
+      text: `Váš verifikační kód je ${otp}`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent: " + info.response);
+  } catch (error) {
+    console.error("Error sending email:", error);
   }
 };

@@ -29,10 +29,33 @@ export const login = async (formData) => {
     const res = await axios.post(`${getURL()}/users/login`, formData);
     const data = res.data;
 
+    /*
     localStorage.setItem("token", data.token);
     localStorage.setItem("username", data.payload.username);
     localStorage.setItem("email", data.payload.email);
+*/
 
+    return {
+      status: res.status,
+      message: data.message,
+      //user: data.payload,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      status: err.response.status,
+      message: err.response.data.message,
+    };
+  }
+};
+
+export const verifyOTP = async (formData) => {
+  try {
+    const res = await axios.post(`${getURL()}/users/verify-otp`, formData);
+    const data = res.data;
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("username", data.payload.username);
+    localStorage.setItem("email", data.payload.email);
     return {
       status: res.status,
       message: data.message,
