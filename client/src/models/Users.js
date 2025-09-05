@@ -29,6 +29,8 @@ export const login = async (formData) => {
     const res = await axios.post(`${getURL()}/users/login`, formData);
     const data = res.data;
 
+    localStorage.setItem("otpToken", data.token);
+
     /*
     localStorage.setItem("token", data.token);
     localStorage.setItem("username", data.payload.username);
@@ -51,7 +53,12 @@ export const login = async (formData) => {
 
 export const verifyOTP = async (formData) => {
   try {
-    const res = await axios.post(`${getURL()}/users/verify-otp`, formData);
+    const otpToken = localStorage.getItem("otpToken");
+    if (!otpToken) return;
+
+    const res = await axios.post(`${getURL()}/users/verify-otp`, formData, {
+      headers: { Authorization: `Bearer ${otpToken}` },
+    });
     const data = res.data;
     localStorage.setItem("token", data.token);
     localStorage.setItem("username", data.payload.username);

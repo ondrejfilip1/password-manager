@@ -46,6 +46,7 @@ export default function Login() {
     setIsLoading(true);
     const data = await verifyOTP({ otp: formData });
     if (data.status === 200) {
+      localStorage.removeItem("otpToken");
       window.location.replace("/dashboard");
     } else {
       setMessage(data.message);
