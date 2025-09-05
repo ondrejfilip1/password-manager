@@ -87,7 +87,7 @@ export default function Login() {
               <form onSubmit={handleOTP}>
                 <div className="flex flex-col gap-6 justify-center items-center text-center">
                   <MailWarning className="text-muted-foreground h-8 w-8" />
-                  <p>
+                  <p className="text-sm">
                     Na váš email <span className="underline">{email}</span> jsme
                     Vám zaslali verifikační kód
                   </p>
