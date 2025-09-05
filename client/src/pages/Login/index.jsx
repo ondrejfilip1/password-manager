@@ -21,6 +21,14 @@ import {
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { MailWarning } from "lucide-react";
 import Countdown from "react-countdown";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Login() {
   const [formData, setFormData] = useState();
@@ -79,7 +87,10 @@ export default function Login() {
               <form onSubmit={handleOTP}>
                 <div className="flex flex-col gap-6 justify-center items-center text-center">
                   <MailWarning className="text-muted-foreground h-8 w-8" />
-                  <p>Na váš email <span className="underline">{email}</span> jsme Vám zaslali verifikační kód</p>
+                  <p>
+                    Na váš email <span className="underline">{email}</span> jsme
+                    Vám zaslali verifikační kód
+                  </p>
                   <InputOTP
                     maxLength={6}
                     value={formData}
@@ -112,7 +123,11 @@ export default function Login() {
                       {message}
                     </p>
                   )}
-                  <Button type="submit" disabled={isLoading || !formData || formData.length !== 6} className="w-full">
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !formData || formData.length !== 6}
+                    className="w-full"
+                  >
                     {isLoading ? <Spinner variant="ellipsis" /> : "Ověřit"}
                   </Button>
                 </div>
@@ -133,12 +148,32 @@ export default function Login() {
                   <div className="grid gap-2">
                     <div className="flex items-center">
                       <Label htmlFor="password">Heslo</Label>
-                      <Link
-                        to="#"
-                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                      >
-                        Zapomněli jste heslo?
-                      </Link>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Link
+                            to="#"
+                            className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                          >
+                            Zapomněli jste heslo?
+                          </Link>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Zapomněli jste heslo?</DialogTitle>
+                            <DialogDescription>
+                              <p className="my-4">
+                                Vaše heslo u nás neukládáme, máme jen jeho
+                                zašifrovaný otisk (hash).
+                              </p>
+                              <p>
+                                Proto jej bohužel nemůžeme obnovit ani poslat
+                                zpět. Pokud jste heslo zapomněli, vytvořte si
+                                prosím nový účet s jiným heslem.
+                              </p>
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                     <Input
                       id="password"
