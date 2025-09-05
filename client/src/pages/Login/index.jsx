@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { MailWarning } from "lucide-react";
+import Countdown from "react-countdown";
 
 export default function Login() {
   const [formData, setFormData] = useState();
@@ -27,6 +28,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [email, setEmail] = useState("");
+  const [minuteAhead, setMinuteAhead] = useState();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -37,6 +39,8 @@ export default function Login() {
       setEmail(formData.email);
       setMessage("");
       setFormData();
+      // OTP expiration
+      setMinuteAhead(Date.now() + 60000);
     } else {
       setMessage(data.message);
     }
@@ -75,7 +79,7 @@ export default function Login() {
               <form onSubmit={handleOTP}>
                 <div className="flex flex-col gap-6 justify-center items-center text-center">
                   <MailWarning className="text-muted-foreground h-8 w-8" />
-                  <p>Na váš email {email} jsme Vám zaslali verifikační kód</p>
+                  <p>Na váš email <span className="underline">{email}</span> jsme Vám zaslali verifikační kód</p>
                   <InputOTP
                     maxLength={6}
                     value={formData}
@@ -91,12 +95,24 @@ export default function Login() {
                       <InputOTPSlot index={5} />
                     </InputOTPGroup>
                   </InputOTP>
+                  <p className="text-center text-sm">
+                    <Countdown
+                      date={minuteAhead}
+                      renderer={(props) => (
+                        <>
+                          {props.minutes}:
+                          {props.seconds.toString().padStart(2, "0")}
+                        </>
+                      )}
+                      onComplete={() => window.location.replace("/login")}
+                    />
+                  </p>
                   {message && (
-                    <p className="text-center text-red-500 opacity-50 text-sm mt-2">
+                    <p className="text-center text-red-500 opacity-50 text-sm">
                       {message}
                     </p>
                   )}
-                  <Button type="submit" disabled={isLoading} className="w-full">
+                  <Button type="submit" disabled={isLoading || !formData || formData.length !== 6} className="w-full">
                     {isLoading ? <Spinner variant="ellipsis" /> : "Ověřit"}
                   </Button>
                 </div>
