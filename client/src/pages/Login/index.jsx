@@ -34,6 +34,7 @@ export default function Login() {
     if (data.status === 200) {
       setShowOTP(true);
       setEmail(formData.email);
+      setMessage("");
       setFormData();
     } else {
       setMessage(data.message);
