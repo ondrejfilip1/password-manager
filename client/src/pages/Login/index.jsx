@@ -19,6 +19,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { MailWarning } from "lucide-react";
 
 export default function Login() {
   const [formData, setFormData] = useState();
@@ -73,6 +74,7 @@ export default function Login() {
             {showOTP ? (
               <form onSubmit={handleOTP}>
                 <div className="flex flex-col gap-6 justify-center items-center text-center">
+                  <MailWarning className="text-muted-foreground h-8 w-8" />
                   <p>Na váš email {email} jsme Vám zaslali verifikační kód</p>
                   <InputOTP
                     maxLength={6}
