@@ -1,5 +1,5 @@
 
-<h1 align="center">Manažér hesel</h1>
+<h1 align="center">Správce hesel</h1>
 <ul>
   <li><a href="https://app-62zq.onrender.com/">🌐 Webová verze</a></li>
   <li>Aplikace pro správu hesel</li>
