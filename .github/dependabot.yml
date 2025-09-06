@@ -4,8 +4,16 @@ updates:
     directory: "/client"
     schedule:
       interval: "weekly"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
 
   - package-ecosystem: "npm"
     directory: "/server"
     schedule:
       interval: "weekly"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
