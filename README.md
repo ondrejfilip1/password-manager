@@ -1,9 +1,9 @@
 
-<h1 align="center">Password manager aplikace</h1>
+<h1 align="center">Správce hesel</h1>
 <ul>
   <li><a href="https://app-62zq.onrender.com/">🌐 Webová verze</a></li>
-  <li>Aplikace pro ukládání hesel</li>
-  <li>Obsahuje přihlašovací a registrovací systém s dvoufázovým ověřením</li>
+  <li>Webová aplikace pro správu hesel</li>
+  <li>Obsahuje přihlašovací a registrovací systém s dvoufázovým ověřením (2FA)</li>
   <li>Hesla jsou šifrována pomocí <a href="https://cs.wikipedia.org/wiki/Advanced_Encryption_Standard">AES-256</a></li>
 </ul>
 
@@ -13,7 +13,7 @@
 
 - **Client:** React + Vite, Axios, shadcn/ui, TailwindCSS, Lucide
 
-- **Server:** Node, Express, MongoDB, Mongoose, JWT (JSON Web Token)
+- **Server:** Node, Express, MongoDB, Mongoose, JWT (JSON Web Token), Nodemailer
 
 ## 🚀 Instalace a spuštění
 
