@@ -2,7 +2,7 @@
 <h1 align="center">Správce hesel</h1>
 <ul>
   <li><a href="https://app-62zq.onrender.com/">🌐 Webová verze</a></li>
-  <li>Aplikace pro správu hesel</li>
+  <li>Webová aplikace pro správu hesel</li>
   <li>Obsahuje přihlašovací a registrovací systém s dvoufázovým ověřením (2FA)</li>
   <li>Hesla jsou šifrována pomocí <a href="https://cs.wikipedia.org/wiki/Advanced_Encryption_Standard">AES-256</a></li>
 </ul>
