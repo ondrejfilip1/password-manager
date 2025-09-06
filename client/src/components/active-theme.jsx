@@ -5,12 +5,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 const DEFAULT_THEME = "catppuccin";
 const ThemeContext = createContext(undefined);
 
-export const themeList = ["default", "slate", "mocha-mousse", "catppuccin"];
+export const themeList = ["default", "slate", "mocha-mousse", "catppuccin", "caffeine"];
 export const themeListTranslated = {
   default: "Výchozí",
   slate: "Břidlice",
   "mocha-mousse": "Mocha pěna",
   catppuccin: "Catppuccin",
+  caffeine: "Kofein"
 };
 
 export function ActiveThemeProvider({
