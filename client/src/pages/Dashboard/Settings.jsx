@@ -80,7 +80,7 @@ export default function Settings() {
             >
               <div className="hover:border-accent items-center rounded-xl border-2 p-1">
                 <div
-                  className={`space-y-2 rounded-lg bg-background p-2 dark theme-${activeTheme}`}
+                  className={`space-y-2 rounded-lg bg-card p-2 dark theme-${activeTheme}`}
                 >
                   <div className="space-y-2 rounded-md bg-muted p-2 shadow-sm">
                     <div className="h-2 w-[80px] rounded-lg bg-muted-foreground" />
@@ -118,9 +118,9 @@ export default function Settings() {
               <SelectLabel>Motivy</SelectLabel>
               {themeList.map((value, index) => (
                 <SelectItem value={value} key={index}>
-                  <div className={`theme-${value}`}>
-                    <div className="rounded-full h-4 w-4 bg-linear-45 from-primary to-primary-foreground" />
-                  </div>
+                  <div
+                    className={`theme-${value} rounded-full h-4 w-4 bg-linear-45 from-primary to-primary-foreground`}
+                  />
                   <span>{themeListTranslated[value]}</span>
                 </SelectItem>
               ))}
