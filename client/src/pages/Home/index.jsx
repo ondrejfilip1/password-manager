@@ -16,7 +16,7 @@ export default function Home() {
         sizing="fill"
         className="!fixed w-100 h-screen"
       />
-      <ThemeSwitcher />
+      <ThemeSwitcher showAccount={true} />
       <div className="max-w-container mx-auto px-4 flex flex-col gap-12 pt-16 sm:gap-24 min-h-screen justify-center">
         <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
           <div className="flex flex-col items-start gap-6 sm:gap-8 text-center">
