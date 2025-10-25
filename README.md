@@ -35,4 +35,4 @@ Server
 
 - Možnost pro inputy při přidávání hesla (telefon, email, jméno)
 - Animace na hover
-- Zobrazení jen domény stránky v dashboardu (odebrání https://)
+- Zobrazení jen domény stránky v dashboardu (odebrání "https://")
