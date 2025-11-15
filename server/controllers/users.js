@@ -213,15 +213,13 @@ exports.verifyOTP = async (req, res, next) => {
 const sendOTP = async (email, otp) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: "pass.manager.help.email@gmail.com",
         pass: GMAIL_APP_PASSWORD,
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
-      secure: true,
     });
 
     fs.readFile("./email/otp.html", { encoding: "utf-8" }, async (e, html) => {
