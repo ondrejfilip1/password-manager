@@ -218,6 +218,10 @@ const sendOTP = async (email, otp) => {
         user: "pass.manager.help.email@gmail.com",
         pass: GMAIL_APP_PASSWORD,
       },
+      tls: {
+        rejectUnauthorized: false,
+      },
+      secure: true,
     });
 
     fs.readFile("./email/otp.html", { encoding: "utf-8" }, async (e, html) => {

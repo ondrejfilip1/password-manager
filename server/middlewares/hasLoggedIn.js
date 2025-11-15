@@ -10,7 +10,6 @@ module.exports = async (req, res, next) => {
         verified = jwt.verify(token, process.env.JWT_SECRET);
     } catch (e) {
         return res.status(400).json({ message: "Verifikační kód vypršel" });
-        console.log(e);
     }
 
     if (verified.stage !== "OTP")
